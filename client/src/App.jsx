@@ -6,6 +6,8 @@ import { DataContext } from './context/DataContext'
 
 const App = () => {
 
+  const [loading, setLoading] = useState(false);
+
   const [enableEdit, setEnableEdit] = useState(false);
   const [editID, setEditID] = useState("");
 
@@ -18,9 +20,12 @@ const App = () => {
 
   const getHistory = async () => {
 
+    setLoading(true);
+
     try {
-      const res = await axios.get('http://localhost:7000/api/v1/calculations');
+      const res = await axios.get('https://grorapid.onrender.com/api/v1/calculations');
       setHistory(res.data);
+      setLoading(false)
       console.log(res.data);
     } catch (error) {
       console.log(error);
@@ -35,7 +40,7 @@ const App = () => {
   const deleteHistory = async (id) => {
 
     try {
-      const res = await axios.delete(`http://localhost:7000/api/v1/calculations/${id}`);
+      const res = await axios.delete(`https://grorapid.onrender.com/api/v1/calculations/${id}`);
       console.log(res.data);
       getHistory();
       alert("Deleted!")
@@ -48,7 +53,7 @@ const App = () => {
   const saveCalculation = async (data) => {
 
     try {
-      const res = await axios.post('http://localhost:7000/api/v1/calculations', data);
+      const res = await axios.post('https://grorapid.onrender.com/api/v1/calculations', data);
       getHistory();
       setValue("");
       setResult("");
@@ -64,7 +69,7 @@ const App = () => {
   const editCalculation = async (data) => {
 
     try {
-      const res = await axios.patch(`http://localhost:7000/api/v1/calculations/${editID}`, data);
+      const res = await axios.patch(`https://grorapid.onrender.com/api/v1/calculations/${editID}`, data);
       getHistory();
       setEnableEdit(false)
       setValue("");
@@ -101,7 +106,8 @@ const App = () => {
         editCalculation,
         history,
         deleteHistory,
-        editData
+        editData,
+        loading
       }}>
        <Calculator/>
        <History />
